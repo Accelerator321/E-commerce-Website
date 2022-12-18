@@ -1,0 +1,40 @@
+extends base.pug
+
+block content
+    #{auth}
+    if auth
+        .container.my-4(style='max-width:30rem')
+                    form(enctype="multipart/form-data",method = 'POST', action='/admin')
+                        div.my-2 
+                            h5 Enter name
+
+                            input(type="text" name = 'name' required="")
+                        
+                        .mb-3
+                            h5 
+                                label.form-label(for='formFile') Select a picture
+                            input#formFile.form-control(type='file' name='img' required="")
+
+                        div.mb-3
+                            h5 Enter Price
+                            br         
+                            input(type="text" name = 'price' required="")
+                        div
+                            h5 Enter Descreption
+                            br
+                            textarea(cols="50", rows="10" ,type="text" name = 'desc')
+        
+                        button.btn.btn-outline-primary submit
+    
+    if !auth
+        .container(style='max-width:20rem')
+            h3(style="text-align:center")
+                |Please Login First
+            form(action='/admin/login',method='POST', enctype = 'application/json')
+                .mb-3
+                    label.form-label(for='exampleInputEmail1') Email address
+                    input#exampleInputEmail1.form-control(type='email',name="email", aria-describedby='emailHelp')
+                .mb-3
+                    label.form-label(for='exampleInputPassword1') Password
+                    input#exampleInputPassword1.form-control(type='password', name="password")
+                button.btn.btn-primary(type='submit') Submit

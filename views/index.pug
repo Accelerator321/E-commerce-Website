@@ -1,0 +1,54 @@
+extends base.pug
+
+block content 
+    
+    //- appending all the items for home page
+    .container.d-flex.flex-direction-row.flex-wrap.item-container
+            each item in items 
+                .card.mx-3.my-3.item-card.item-card
+                    
+                    img.card-img-top(src=`${item.img}`, alt='...')
+                    .card-body
+                        h3.card-title #{item.name}
+                        h5 #{item.price}
+                        p.card-text #{item.desc}
+                        if auth 
+                            button.btn.btn-outline-primary(type='button', data-bs-toggle='modal',data-bs-target=`#${item.name}`)
+                                |Edit
+                        button.btn.btn-outline-secondary(onclick=`addToList("${item.name}","${item.price}")`)
+                            |Add to list
+                        
+            // Edit item modal
+            if auth               
+                each item in items 
+                    .modal.fade(data-bs-backdrop='static', data-bs-keyboard='false', tabindex='-1', aria-labelledby='staticBackdropLabel', aria-hidden='true' id=`${item.name}`)
+                        .modal-dialog
+                            .modal-content
+                                .modal-header
+                                    h1#staticBackdropLabel.modal-title.fs-5 #{item.name}
+                                    button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+                                .modal-body
+                                    form(method = 'POST', action='/admin/edit' id=`${item._id}`)
+                                        div.my-2 
+                                            input(type="text" name = '_id' style="display:hidden" value=`${item._id}`,required="" )
+                                            h5 Edit name
+
+
+                                            input(type="text" name = 'name' value=`${item.name}`,required="" )
+
+                                        div.mb-3
+                                            h5 Edit Price
+                                            br         
+                                            input(type="text" name = 'price', value=`${item.price}`, required="" )
+                                        div
+                                            h5 Edit Descreption
+                                            br
+                                            textarea(cols="50", rows="10" ,type="text" name = 'desc')
+                                                |#{item.desc}
+                                            
+                                .modal-footer
+                                    button.btn.btn-secondary(type='button',form="", data-bs-dismiss='modal') Close
+                                    button.btn.btn-primary(type='submit' form =`${item._id}` value='submit') submit
+
+block script
+    script(src="/static/js/addToList.js") 
